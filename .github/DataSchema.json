@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Schema for User Feedback and Ratings",
+  "description": "JSON Schema для опису структури даних про користувачів, страви/уроки, оцінки, відгуки та статистику",
+  "type": "object",
+  "properties": {
+    "Користувачі": {
+      "type": "array",
+      "description": "Список користувачів системи",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Унікальний ідентифікатор користувача",
+            "minimum": 1
+          },
+          "ім'я": {
+            "type": "string",
+            "description": "Ім'я користувача",
+            "maxLength": 50,
+            "pattern": "^[А-Яа-яІіЇїЄєҐґA-Za-z ]+$"
+          },
+          "тип": {
+            "type": "string",
+            "description": "Тип користувача (менеджер або звичайний)",
+            "enum": ["менеджер", "звичайний"]
+          }
+        },
+        "required": ["id", "ім'я", "тип"]
+      },
+      "minItems": 1
+    },
+    "Оцінки": {
+      "type": "array",
+      "description": "Список оцінок страв/уроків",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Унікальний ідентифікатор оцінки",
+            "minimum": 1
+          },
+          "значення": {
+            "type": "number",
+            "description": "Кількісна оцінка",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "коментар": {
+            "type": "string",
+            "description": "Текстовий коментар користувача",
+            "maxLength": 300
+          },
+          "користувач_id": {
+            "type": "integer",
+            "description": "Ідентифікатор користувача, який залишив оцінку"
+          },
+          "страва_урок_id": {
+            "type": "integer",
+            "description": "Ідентифікатор страви/уроку, для якого залишено оцінку"
+          }
+        },
+        "required": ["id", "значення", "користувач_id", "страва_урок_id"]
+      }
+    },
+    "Відгуки": {
+      "type": "array",
+      "description": "Список відгуків користувачів",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Унікальний ідентифікатор відгуку",
+            "minimum": 1
+          },
+          "текст": {
+            "type": "string",
+            "description": "Текст відгуку",
+            "maxLength": 300
+          },
+          "дата": {
+            "type": "string",
+            "description": "Дата залишення відгуку",
+            "format": "date",
+            "pattern": "^(20\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$"
+          },
+          "користувач_id": {
+            "type": "integer",
+            "description": "Ідентифікатор користувача, який залишив відгук"
+          },
+          "страва_урок_id": {
+            "type": "integer",
+            "description": "Ідентифікатор страви/уроку, про який залишено відгук"
+          }
+        },
+        "required": ["id", "текст", "дата", "користувач_id", "страва_урок_id"]
+      }
+    },
+    "Страви_Уроки": {
+      "type": "array",
+      "description": "Список страв та уроків",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Унікальний ідентифікатор страви/уроку",
+            "minimum": 1
+          },
+          "назва": {
+            "type": "string",
+            "description": "Назва страви або уроку",
+            "maxLength": 50,
+            "pattern": "^[А-Яа-яІіЇїЄєҐґA-Za-z0-9 ]+$"
+          },
+          "тип": {
+            "type": "string",
+            "description": "Тип об'єкта: страва або урок",
+            "enum": ["страва", "урок"]
+          }
+        },
+        "required": ["id", "назва", "тип"]
+      }
+    },
+    "Статистика": {
+      "type": "object",
+      "description": "Загальна статистика системи",
+      "properties": {
+        "середня_оцінка": {
+          "type": "number",
+          "description": "Середня оцінка",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "кількість_відгуків": {
+          "type": "integer",
+          "description": "Загальна кількість відгуків",
+          "minimum": 0
+        }
+      },
+      "required": ["середня_оцінка", "кількість_відгуків"]
+    }
+  },
+  "required": ["Користувачі", "Оцінки", "Відгуки", "Страви_Уроки", "Статистика"]
+}
